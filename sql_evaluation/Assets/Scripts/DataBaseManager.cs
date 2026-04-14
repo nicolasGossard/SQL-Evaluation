@@ -140,13 +140,19 @@ public class DatabaseManager : MonoBehaviour
             p.level,
             p.experience,
             (p.level * 100 + p.experience) AS total_xp,
-            COUNT(DISTINCT pq.quest_id) AS quests_completed,
+
+            COUNT(DISTINCT qh.quest_id) AS quests_completed,
+
             COUNT(DISTINCT pa.achievement_id) AS achievements_unlocked
+
         FROM players p
-        LEFT JOIN player_quests pq 
-            ON p.id = pq.player_id AND pq.status = 'completed'
+
+        LEFT JOIN quest_history qh 
+            ON p.id = qh.player_id
+
         LEFT JOIN player_achievements pa 
             ON p.id = pa.player_id
+
         GROUP BY p.id
         ");
 
